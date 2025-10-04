@@ -48,8 +48,6 @@ export function MonacoEditor({
         { token: "variable", foreground: "E5E7EB" },
       ],
       colors: {
-        "editor.background": "#0F172A",
-        "editor.foreground": "#E2E8F0",
         "editor.lineHighlightBackground": "#1E293B",
         "editor.selectionBackground": "#374151",
         "editor.inactiveSelectionBackground": "#1F2937",

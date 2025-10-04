@@ -8,6 +8,8 @@ export interface ScriptItem {
   script_type: "unit_test" | "simulation_test";
   codePython: string;
   codeMatlab: string;
+  isGeneratedPython: boolean;
+  isGeneratedMatlab: boolean;
   lastModified: string | null;
   noOfModification: number;
   createdAt: string;
@@ -24,8 +26,10 @@ export const mockScripts: ScriptItem[] = [
     testDescription: "PID Controller Response Test",
     script_language: "Python",
     script_type: "unit_test",
-    codePython: "",
+    codePython: "Example Python code",
     codeMatlab: "",
+    isGeneratedPython: true,
+    isGeneratedMatlab: false,
     lastModified: null,
     noOfModification: 0,
     createdAt: "2025-10-03T12:34:36.093Z",
@@ -41,6 +45,8 @@ export const mockScripts: ScriptItem[] = [
     script_type: "unit_test",
     codeMatlab: "",
     codePython: "",
+    isGeneratedPython: false,
+    isGeneratedMatlab: false,
     lastModified: null,
     noOfModification: 0,
     createdAt: "2025-10-03T12:36:40.000Z",
@@ -56,6 +62,8 @@ export const mockScripts: ScriptItem[] = [
     script_type: "simulation_test",
     codePython: "",
     codeMatlab: "",
+    isGeneratedPython: false,
+    isGeneratedMatlab: false,
     lastModified: null,
     noOfModification: 1,
     createdAt: "2025-10-03T12:37:22.000Z",
@@ -71,6 +79,8 @@ export const mockScripts: ScriptItem[] = [
     script_type: "unit_test",
     codePython: "",
     codeMatlab: "",
+    isGeneratedPython: false,
+    isGeneratedMatlab: false,
     lastModified: "2025-10-03T14:15:30.000Z",
     noOfModification: 0,
     createdAt: "2025-10-03T13:45:12.000Z",
@@ -86,6 +96,8 @@ export const mockScripts: ScriptItem[] = [
     script_type: "simulation_test",
     codePython: "",
     codeMatlab: "",
+    isGeneratedPython: false,
+    isGeneratedMatlab: false,
     lastModified: null,
     noOfModification: 0,
     createdAt: "2025-10-03T15:22:18.000Z",
@@ -101,6 +113,8 @@ export const mockScripts: ScriptItem[] = [
     script_type: "simulation_test",
     codePython: "",
     codeMatlab: "",
+    isGeneratedPython: false,
+    isGeneratedMatlab: false,
     lastModified: "2025-10-03T16:08:45.000Z",
     noOfModification: 0,
     createdAt: "2025-10-03T15:55:33.000Z",
