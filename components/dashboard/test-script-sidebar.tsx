@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ScriptItem } from "@/lib/data";
+import { ConfirmationDialog } from "./confirmation-dialog";
 import {
   Check,
   X,
@@ -34,6 +35,15 @@ export function TestScriptSidebar({
   const [unitTestsCollapsed, setUnitTestsCollapsed] = useState(false);
   const [simulationTestsCollapsed, setSimulationTestsCollapsed] =
     useState(false);
+  const [deleteDialog, setDeleteDialog] = useState<{
+    isOpen: boolean;
+    scriptId: string;
+    scriptName: string;
+  }>({
+    isOpen: false,
+    scriptId: "",
+    scriptName: "",
+  });
 
   const filteredScripts = filterAccepted
     ? scripts.filter((script) => script.isAccepted)
@@ -62,9 +72,25 @@ export function TestScriptSidebar({
 
   const handleDelete = (scriptId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onScriptDelete) {
-      onScriptDelete(scriptId);
+    const script = scripts.find((s) => s.scriptId === scriptId);
+    if (script) {
+      setDeleteDialog({
+        isOpen: true,
+        scriptId,
+        scriptName: script.testDescription,
+      });
     }
+  };
+
+  const confirmDelete = () => {
+    if (onScriptDelete && deleteDialog.scriptId) {
+      onScriptDelete(deleteDialog.scriptId);
+    }
+    setDeleteDialog({ isOpen: false, scriptId: "", scriptName: "" });
+  };
+
+  const cancelDelete = () => {
+    setDeleteDialog({ isOpen: false, scriptId: "", scriptName: "" });
   };
 
   const handleGenerate = (scriptId: string, e: React.MouseEvent) => {
@@ -133,11 +159,21 @@ export function TestScriptSidebar({
     </div>
   );
 
+  const acceptedCount = scripts.filter((script) => script.isAccepted).length;
+
+  const handleGenerateAllAccepted = () => {
+    const acceptedScripts = scripts.filter((script) => script.isAccepted);
+    // TODO: Implement generate all accepted functionality
+    console.log(
+      "Generate all accepted scripts:",
+      acceptedScripts.map((s) => s.scriptId)
+    );
+  };
   return (
     <div className="h-full flex flex-col space-y-4">
       {/* Filter Header */}
       <Card>
-        <div className="p-4">
+        <div className="p-4 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold text-foreground">
               Test Descriptions
@@ -166,6 +202,15 @@ export function TestScriptSidebar({
               </Button>
             </div>
           </div>
+          <Button
+            onClick={handleGenerateAllAccepted}
+            disabled={acceptedCount === 0}
+            variant="outline"
+            className="w-full font-mono text-sm"
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            Generate All Accepted ({acceptedCount})
+          </Button>
         </div>
       </Card>
       {/* Unit Tests Card */}
@@ -253,6 +298,18 @@ export function TestScriptSidebar({
           )}
         </div>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={cancelDelete}
+        onConfirm={confirmDelete}
+        title="Delete Test Script"
+        description={`Are you sure you want to delete "${deleteDialog.scriptName}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="destructive"
+      />
     </div>
   );
 }

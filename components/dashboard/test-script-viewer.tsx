@@ -4,8 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MonacoEditor } from "@/components/ui/monaco-editor";
-import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
+import { MonacoEditor } from "@/components/dashboard/monaco-editor";
+import { ConfirmationDialog } from "@/components/dashboard/confirmation-dialog";
 import { cn } from "@/lib/utils";
 import { ScriptItem } from "@/lib/data";
 import {
@@ -27,6 +27,7 @@ import {
   Trash2,
   Edit3,
   Lock,
+  Sparkles,
 } from "lucide-react";
 
 interface TestScriptViewerProps {
@@ -473,17 +474,48 @@ export function TestScriptViewer({
             )}
           </div>
 
-          {/* Monaco Editor */}
+          {/* Monaco Editor or Empty State */}
           <div className="flex-1 bg-card border border-border/30 rounded tactical-grid relative overflow-hidden min-h-0">
-            <MonacoEditor
-              value={currentCode}
-              language={currentLanguage.toLowerCase() as "python" | "matlab"}
-              onChange={isEditMode ? handleCodeChange : undefined}
-              onMount={handleEditorMount}
-              readOnly={!isEditMode}
-              className="h-full"
-              height="100%"
-            />
+            {currentCode.trim() === "" ? (
+              <div className="h-full flex flex-col items-center justify-center p-8 text-center">
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold text-muted-foreground">
+                    CODE NOT GENERATED
+                  </h3>
+                  <p className="text-sm font-mono text-muted-foreground/70 max-w-md">
+                    This test doesn't have any generated code yet. Use the
+                    generate button to create {currentLanguage} code for this
+                    test.
+                  </p>
+                  <div className="pt-4">
+                    <Button
+                      variant="outline"
+                      className="font-mono text-sm"
+                      onClick={() => {
+                        // TODO: Implement generate functionality
+                        console.log(
+                          "Generate code for:",
+                          selectedScript?.scriptId
+                        );
+                      }}
+                    >
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Generate {currentLanguage} Code
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <MonacoEditor
+                value={currentCode}
+                language={currentLanguage.toLowerCase() as "python" | "matlab"}
+                onChange={isEditMode ? handleCodeChange : undefined}
+                onMount={handleEditorMount}
+                readOnly={!isEditMode}
+                className="h-full"
+                height="100%"
+              />
+            )}
           </div>
         </div>
       </Card>
