@@ -105,33 +105,34 @@
   --font-serif: Georgia, serif;
   --font-mono: JetBrains Mono, Fira Code, monospace;
   --shadow-color: #000000;
-  --shadow-opacity: 0.35;
+  --shadow-opacity: 0;
   --shadow-blur: 0px;
-  --shadow-spread: 0rem;
+  --shadow-spread: 0px;
   --shadow-offset-x: 0rem;
-  --shadow-offset-y: 0.125rem;
+  --shadow-offset-y: 0px;
   --letter-spacing: normal;
   --spacing: 0.25rem;
-  --shadow-2xs: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.17);
-  --shadow-xs: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.17);
-  --shadow-sm: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 1px 2px -1px hsl(0 0% 0% / 0.35);
-  --shadow: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 1px 2px -1px hsl(0 0% 0% / 0.35);
-  --shadow-md: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 2px 4px -1px hsl(0 0% 0% / 0.35);
-  --shadow-lg: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 4px 6px -1px hsl(0 0% 0% / 0.35);
-  --shadow-xl: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 8px 10px -1px hsl(0 0% 0% / 0.35);
-  --shadow-2xl: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.88);
+  --shadow-2xs: 0rem 0px 0px 0px hsl(0 0% 0% / 0);
+  --shadow-xs: 0rem 0px 0px 0px hsl(0 0% 0% / 0);
+  --shadow-sm: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 1px 2px -1px hsl(0 0% 0% / 0);
+  --shadow: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 1px 2px -1px hsl(0 0% 0% / 0);
+  --shadow-md: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 2px 4px -1px hsl(0 0% 0% / 0);
+  --shadow-lg: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 4px 6px -1px hsl(0 0% 0% / 0);
+  --shadow-xl: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 8px 10px -1px hsl(0 0% 0% / 0);
+  --shadow-2xl: 0rem 0px 0px 0px hsl(0 0% 0% / 0);
   --tracking-normal: normal;
+  --radius: 0rem;
 }
 
 .dark {
-  --background: oklch(0.1822 0 0);
+  --background: oklch(0.235 0 0);
   --foreground: oklch(1 0 0);
-  --card: oklch(0.235 0 0);
+  --card: oklch(0.1822 0 0);
   --card-foreground: oklch(1 0 0);
   --popover: oklch(0.235 0 0);
   --popover-foreground: oklch(1 0 0);
@@ -144,7 +145,7 @@
   --accent: oklch(0.6973 0.1256 259.1368);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.6368 0.2078 25.3313);
-  --border: oklch(0.1822 0 0);
+  --border: oklch(0.4748 0 0);
   --input: oklch(0.285 0 0);
   --ring: oklch(0.6915 0.2023 37.2034);
   --chart-1: oklch(0.6915 0.2023 37.2034);
@@ -165,34 +166,42 @@
   --font-serif: Georgia, serif;
   --font-mono: JetBrains Mono, Fira Code, monospace;
   --shadow-color: #000000;
-  --shadow-opacity: 0.35;
+  --shadow-opacity: 0;
   --shadow-blur: 0px;
-  --shadow-spread: 0rem;
+  --shadow-spread: 0px;
   --shadow-offset-x: 0rem;
-  --shadow-offset-y: 0.125rem;
+  --shadow-offset-y: 0px;
   --letter-spacing: normal;
   --spacing: 0.25rem;
-  --shadow-2xs: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.17);
-  --shadow-xs: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.17);
-  --shadow-sm: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 1px 2px -1px hsl(0 0% 0% / 0.35);
-  --shadow: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 1px 2px -1px hsl(0 0% 0% / 0.35);
-  --shadow-md: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 2px 4px -1px hsl(0 0% 0% / 0.35);
-  --shadow-lg: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 4px 6px -1px hsl(0 0% 0% / 0.35);
-  --shadow-xl: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.35),
-    0rem 8px 10px -1px hsl(0 0% 0% / 0.35);
-  --shadow-2xl: 0rem 0.125rem 0px 0rem hsl(0 0% 0% / 0.88);
+  --shadow-2xs: 0rem 0px 0px 0px hsl(0 0% 0% / 0);
+  --shadow-xs: 0rem 0px 0px 0px hsl(0 0% 0% / 0);
+  --shadow-sm: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 1px 2px -1px hsl(0 0% 0% / 0);
+  --shadow: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 1px 2px -1px hsl(0 0% 0% / 0);
+  --shadow-md: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 2px 4px -1px hsl(0 0% 0% / 0);
+  --shadow-lg: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 4px 6px -1px hsl(0 0% 0% / 0);
+  --shadow-xl: 0rem 0px 0px 0px hsl(0 0% 0% / 0),
+    0rem 8px 10px -1px hsl(0 0% 0% / 0);
+  --shadow-2xl: 0rem 0px 0px 0px hsl(0 0% 0% / 0);
+  --radius: 0rem;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
+  /* Smooth transitions for theme switching */
+  * {
+    transition: background-color 0.2s ease, border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-card text-foreground;
     letter-spacing: var(--tracking-normal);
   }
 }

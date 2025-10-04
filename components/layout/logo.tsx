@@ -6,12 +6,12 @@ export function Logo() {
   return (
     <Link
       href="/"
-      className="flex items-center justify-center opacity-100 relative group transition-all duration-300 ease-out hover:brightness-110"
+      className="flex items-center justify-center relative group"
       style={{ width: "160px", height: "36px" }}
     >
       {/* Text "Hyperpilot" SVG */}
       <div
-        className="flex-shrink-0 absolute transition-all duration-300 ease-out"
+        className="flex-shrink-0 absolute"
         aria-hidden="true"
         style={{
           imageRendering: "pixelated",
@@ -23,7 +23,7 @@ export function Logo() {
       >
         <svg
           viewBox="0 0 109.998 20"
-          className="w-full h-full text-foreground"
+          className="w-full h-full text-foreground/90 group-hover:text-foreground transition-colors duration-200"
           overflow="visible"
         >
           <path
@@ -34,7 +34,7 @@ export function Logo() {
       </div>
 
       <div
-        className="flex-shrink-0 absolute opacity-100 transition-all duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-110"
+        className="flex-shrink-0 absolute opacity-100 transition-transform duration-300 group-hover:-translate-y-1  "
         aria-hidden="true"
         style={{
           imageRendering: "pixelated",
@@ -46,7 +46,7 @@ export function Logo() {
       >
         <svg
           viewBox="0 0 11.043 8.834"
-          className="w-full h-full text-foreground"
+          className="w-full h-full text-foreground/90 group-hover:text-foreground transition-colors duration-200"
           overflow="visible"
         >
           <path
