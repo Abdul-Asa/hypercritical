@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { mockScripts, ScriptItem } from "@/lib/data";
+import { ScriptItem } from "@/lib/data";
 import {
   Check,
   X,
@@ -16,16 +16,21 @@ import {
 } from "lucide-react";
 
 interface TestScriptSidebarProps {
+  scripts: ScriptItem[];
   selectedScript: ScriptItem | null;
   onScriptSelect: (script: ScriptItem) => void;
+  onScriptUpdate?: (scriptId: string, updates: Partial<ScriptItem>) => void;
+  onScriptDelete?: (scriptId: string) => void;
 }
 
 export function TestScriptSidebar({
+  scripts,
   selectedScript,
   onScriptSelect,
+  onScriptUpdate,
+  onScriptDelete,
 }: TestScriptSidebarProps) {
   const [filterAccepted, setFilterAccepted] = useState(false);
-  const [scripts, setScripts] = useState(mockScripts);
   const [unitTestsCollapsed, setUnitTestsCollapsed] = useState(false);
   const [simulationTestsCollapsed, setSimulationTestsCollapsed] =
     useState(false);
@@ -47,18 +52,19 @@ export function TestScriptSidebar({
 
   const handleAcceptToggle = (scriptId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setScripts((prev) =>
-      prev.map((script) =>
-        script.scriptId === scriptId
-          ? { ...script, isAccepted: !script.isAccepted }
-          : script
-      )
-    );
+    if (onScriptUpdate) {
+      const script = scripts.find((s) => s.scriptId === scriptId);
+      if (script) {
+        onScriptUpdate(scriptId, { isAccepted: !script.isAccepted });
+      }
+    }
   };
 
   const handleDelete = (scriptId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setScripts((prev) => prev.filter((script) => script.scriptId !== scriptId));
+    if (onScriptDelete) {
+      onScriptDelete(scriptId);
+    }
   };
 
   const handleGenerate = (scriptId: string, e: React.MouseEvent) => {
