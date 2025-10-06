@@ -34,7 +34,6 @@ export function MonacoEditor({
     monacoRef.current = monaco;
     setIsLoading(false);
 
-    // Configure Monaco themes
     monaco.editor.defineTheme("tactical-dark", {
       base: "vs-dark",
       inherit: true,
@@ -95,11 +94,9 @@ export function MonacoEditor({
       },
     });
 
-    // Set initial theme
     const initialTheme = theme === "dark" ? "tactical-dark" : "tactical-light";
     monaco.editor.setTheme(initialTheme);
 
-    // Configure editor options
     editor.updateOptions({
       fontSize: 14,
       fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
@@ -123,7 +120,6 @@ export function MonacoEditor({
       detectIndentation: false,
     });
 
-    // Call the onMount callback if provided
     if (onMount) {
       onMount(editor, monaco);
     }
@@ -135,23 +131,19 @@ export function MonacoEditor({
     }
   };
 
-  // Map language names to Monaco language identifiers
   const getMonacoLanguage = (lang: "python" | "matlab") => {
     switch (lang) {
       case "python":
         return "python";
       case "matlab":
-        // Python is the closest syntax match for MATLAB
-        // Both support: mathematical operations, array indexing, function calls
-        // MATLAB: plot(x, y); title('Graph');
-        // Python:  plot(x, y); title('Graph')
+        // Monaco doesn't support MATLAB syntax
+        // Python is the closest syntax match
         return "python";
       default:
         return "plaintext";
     }
   };
 
-  // Handle theme changes
   useEffect(() => {
     if (monacoRef.current && editorRef.current) {
       const monacoTheme = theme === "dark" ? "tactical-dark" : "tactical-light";

@@ -7,13 +7,11 @@ export function useMobile() {
 
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+      setIsMobile(window.innerWidth < 1024);
     };
 
-    // Check on mount
     checkIsMobile();
 
-    // Listen for resize events
     window.addEventListener("resize", checkIsMobile);
 
     return () => window.removeEventListener("resize", checkIsMobile);

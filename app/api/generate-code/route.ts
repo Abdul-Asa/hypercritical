@@ -15,7 +15,6 @@ export async function POST(req: Request) {
     const { testDescription, language, testType, scriptId }: GenerateRequest =
       await req.json();
 
-    // Validate input
     if (!testDescription || !language || !testType || !scriptId) {
       return new Response("Missing required fields", { status: 400 });
     }
@@ -65,10 +64,9 @@ Return pure, executable ${language} code only.`;
       model: openai("gpt-4o"),
       system: systemPrompt,
       prompt: userPrompt,
-      temperature: 0.1, // Low temperature for consistent, accurate code generation
+      temperature: 0.1,
     });
 
-    // Return streaming response
     return result.toTextStreamResponse({
       headers: {
         "Content-Type": "text/plain; charset=utf-8",

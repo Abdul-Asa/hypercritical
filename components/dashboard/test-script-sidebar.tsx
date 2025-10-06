@@ -6,41 +6,26 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn, getShortId } from "@/lib/utils";
 import { ScriptItem } from "@/lib/data";
-import { useData } from "@/hooks/useData";
-import {
-  Check,
-  X,
-  Sparkles,
-  ChevronDown,
-  ChevronRight,
-  Trash2,
-} from "lucide-react";
+import { useData } from "@/hooks/use-data";
+import { Check, X, ChevronDown, ChevronRight, Trash2 } from "lucide-react";
 import { AlertWithTrigger } from "./alert-with-trigger";
 
 export function TestScriptSidebar() {
   const {
     updateScript,
-    getAcceptedScripts,
     getUnitTests,
     getSimTests,
     selectScript,
     selectedScript,
   } = useData();
 
-  // const { generatingScripts, handleGenerateAllAccepted } = useStream();
   const [filterAccepted, setFilterAccepted] = useState(false);
   const [unitTestsCollapsed, setUnitTestsCollapsed] = useState(false);
   const [simulationTestsCollapsed, setSimulationTestsCollapsed] =
     useState(false);
 
-  const acceptedScripts = getAcceptedScripts();
-  const acceptedCount = acceptedScripts.length;
   const unitTests = getUnitTests(filterAccepted);
   const simulationTests = getSimTests(filterAccepted);
-
-  const handleGenerateAllAcceptedClick = async () => {
-    // await handleGenerateAllAccepted(scripts, updateScript);
-  };
 
   return (
     <div className="h-full flex flex-col space-y-4">
@@ -75,24 +60,6 @@ export function TestScriptSidebar() {
                 </Button>
               </div>
             </div>
-            <Button
-              onClick={handleGenerateAllAcceptedClick}
-              disabled={acceptedCount === 0}
-              // || generatingScripts.size > 0}
-              variant="outline"
-              className={cn(
-                "w-full font-mono text-sm flex-wrap h-auto min-h-[2.5rem] py-2"
-                // generatingScripts.size > 0 && "animate-pulse"
-              )}
-            >
-              <Sparkles className="h-4 w-4 mr-2 flex-shrink-0" />
-              <span className="break-words">
-                {/* {generatingScripts.size > 0
-                ? `Generating... (${generatingScripts.size}/${acceptedCount})`
-                : `Generate All Accepted (${acceptedCount})`} */}
-                Generate All Accepted ({acceptedCount})
-              </span>
-            </Button>
           </div>
         </div>
       </Card>
@@ -142,7 +109,6 @@ export function TestScriptSidebar() {
         </div>
       </Card>
 
-      {/* Simulation Tests Card */}
       <Card
         className={cn(
           "transition-all duration-200",
@@ -209,17 +175,11 @@ const ScriptButton = ({
   selectScript,
   updateScript,
 }: ScriptButtonProps) => {
-  // const { handleGenerateScript } = useStream();
   const { deleteScript } = useData();
 
   const handleAcceptToggle = (scriptId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     updateScript(scriptId, { isAccepted: !script.isAccepted });
-  };
-
-  const handleGenerateClick = async (scriptId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    // await handleGenerateScript(script, updateScript);
   };
 
   const confirmDelete = () => {
@@ -284,18 +244,6 @@ const ScriptButton = ({
               variant="destructive"
               onConfirm={confirmDelete}
             />
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={(e) => handleGenerateClick(script.scriptId, e)}
-              // disabled={generatingScripts.has(script.scriptId)}
-              className={cn(
-                "h-6 w-6 p-0 rounded text-foreground"
-                // generatingScripts.has(script.scriptId) && "animate-pulse"
-              )}
-            >
-              <Sparkles className="h-3 w-3" />
-            </Button>
           </div>
         </div>
       </div>

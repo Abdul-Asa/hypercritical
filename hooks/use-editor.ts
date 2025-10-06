@@ -27,7 +27,7 @@ export interface UseEditorReturn {
 
 export function useEditor(
   selectedScript: ScriptItem | null,
-  onScriptUpdate?: (scriptId: string, updates: Partial<ScriptItem>) => void
+  onScriptUpdate: (scriptId: string, updates: Partial<ScriptItem>) => void
 ): UseEditorReturn {
   const [currentLanguage, setCurrentLanguage] = useState<"Python" | "Matlab">(
     selectedScript?.script_language || "Python"
@@ -38,17 +38,14 @@ export function useEditor(
   const [canRedo, setCanRedo] = useState(false);
   const editorRef = useRef<any>(null);
 
-  // Derive original code from the selected script and current language
   const originalCode = selectedScript
     ? currentLanguage === "Python"
       ? selectedScript.codePython
       : selectedScript.codeMatlab
     : "";
 
-  // Derive isDirty from comparing current code with original
   const isDirty = currentCode !== originalCode;
 
-  // Update code when script changes
   useEffect(() => {
     if (selectedScript) {
       setCurrentLanguage(selectedScript.script_language);
@@ -57,16 +54,14 @@ export function useEditor(
           ? selectedScript.codePython
           : selectedScript.codeMatlab;
       setCurrentCode(code);
-      setIsEditMode(false); // Reset to locked mode when switching scripts
+      setIsEditMode(false);
     } else {
-      // Reset editor state when no script is selected
       setCurrentCode("");
       setIsEditMode(false);
-      setCurrentLanguage("Python"); // Default language
+      setCurrentLanguage("Python");
     }
   }, [selectedScript]);
 
-  // Update code when language changes
   useEffect(() => {
     if (selectedScript) {
       const code =
@@ -75,17 +70,14 @@ export function useEditor(
           : selectedScript.codeMatlab;
       setCurrentCode(code);
     } else {
-      // Clear code when no script is selected
       setCurrentCode("");
     }
   }, [currentLanguage, selectedScript]);
 
-  // Handle editor mount and setup undo/redo tracking
   const handleEditorMount = useCallback(
     (editor: any, monaco: any) => {
       editorRef.current = editor;
 
-      // Track undo/redo state
       const updateUndoRedoState = () => {
         const model = editor.getModel();
         if (model) {
@@ -94,14 +86,12 @@ export function useEditor(
         }
       };
 
-      // Listen for model changes to update undo/redo state
       editor.onDidChangeModelContent(() => {
         updateUndoRedoState();
       });
 
-      // Setup keyboard shortcuts
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-        if (selectedScript && onScriptUpdate && isDirty && isEditMode) {
+        if (selectedScript && isDirty && isEditMode) {
           handleSave();
         }
       });
@@ -111,33 +101,33 @@ export function useEditor(
     [selectedScript, onScriptUpdate, isDirty, isEditMode]
   );
 
-  // Handle code changes
   const handleCodeChange = useCallback((value: string) => {
     setCurrentCode(value);
   }, []);
 
-  // Handle language change
   const handleLanguageChange = useCallback(
     (newLanguage: "Python" | "Matlab") => {
       if (isDirty && isEditMode) {
-        // Save current changes before switching if in edit mode
         handleSave();
+      }
+      if (selectedScript) {
+        onScriptUpdate(selectedScript.scriptId, {
+          script_language: newLanguage,
+          lastModified: new Date().toISOString(),
+        });
       }
       setCurrentLanguage(newLanguage);
     },
-    [isDirty, isEditMode]
+    [isDirty, isEditMode, selectedScript, onScriptUpdate]
   );
 
-  // Toggle edit mode
   const toggleEditMode = useCallback(() => {
     if (isEditMode && isDirty) {
-      // If exiting edit mode with unsaved changes, save them
       handleSave();
     }
     setIsEditMode(!isEditMode);
   }, [isEditMode, isDirty]);
 
-  // Save functionality
   const handleSave = useCallback(() => {
     if (!selectedScript || !onScriptUpdate || !isDirty) return;
 
@@ -153,17 +143,15 @@ export function useEditor(
     }
 
     onScriptUpdate(selectedScript.scriptId, updates);
-    setIsEditMode(false); // Lock the editor after saving
+    setIsEditMode(false);
   }, [selectedScript, onScriptUpdate, isDirty, currentCode, currentLanguage]);
 
-  // Undo functionality
   const handleUndo = useCallback(() => {
     if (editorRef.current && canUndo) {
       editorRef.current.trigger("keyboard", "undo", null);
     }
   }, [canUndo]);
 
-  // Redo functionality
   const handleRedo = useCallback(() => {
     if (editorRef.current && canRedo) {
       editorRef.current.trigger("keyboard", "redo", null);

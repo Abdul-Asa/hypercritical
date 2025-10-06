@@ -9,7 +9,6 @@ export function Logo() {
       className="flex items-center justify-center relative group"
       style={{ width: "160px", height: "36px" }}
     >
-      {/* Text "Hyperpilot" SVG */}
       <div
         className="flex-shrink-0 absolute"
         aria-hidden="true"

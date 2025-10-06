@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MonacoEditor } from "@/components/dashboard/monaco-editor";
 import { AlertWithTrigger } from "@/components/dashboard/alert-with-trigger";
-import { cn, getShortId } from "@/lib/utils";
-import { useData } from "@/hooks/useData";
-import { useEditor } from "@/hooks/useEditor";
+import { cn } from "@/lib/utils";
+import { useData } from "@/hooks/use-data";
+import { useEditor } from "@/hooks/use-editor";
+import { useStream } from "@/hooks/use-stream";
 import {
   Select,
   SelectContent,
@@ -16,17 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ChevronDown,
-  ChevronUp,
-  Save,
-  Undo,
-  Redo,
-  Trash2,
-  Edit3,
-  Lock,
-  Sparkles,
-} from "lucide-react";
+import { Save, Undo, Redo, Trash2, Edit3, Lock, Sparkles } from "lucide-react";
 
 export function TestScriptViewer() {
   const { selectedScript, updateScript, deleteScript } = useData();
@@ -45,8 +35,7 @@ export function TestScriptViewer() {
     handleUndo,
     handleRedo,
   } = useEditor(selectedScript, updateScript);
-
-  const [isStatusExpanded, setIsStatusExpanded] = useState(false);
+  const { generateSingle, isStreaming } = useStream();
 
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -65,51 +54,20 @@ export function TestScriptViewer() {
     }
   };
 
+  const handleGenerateCode = async () => {
+    if (!selectedScript) return;
+
+    await generateSingle(
+      selectedScript,
+      currentLanguage,
+      handleCodeChange,
+      updateScript
+    );
+  };
+
   return (
     <Card className="h-full flex flex-col">
       <div className="p-6 flex flex-col flex-1 space-y-4 min-h-screen">
-        <div className="flex-shrink-0">
-          <Button
-            variant="ghost"
-            onClick={() => setIsStatusExpanded(!isStatusExpanded)}
-            className="w-full justify-start items-center p-2 bg-muted/20 rounded border border-border/30 text-xs font-mono hover:bg-muted/30"
-          >
-            {isStatusExpanded ? (
-              <ChevronUp className="h-4 w-4 text-muted-foreground" />
-            ) : (
-              <ChevronDown className="h-4 w-4 text-muted-foreground" />
-            )}
-            <div className="flex items-center space-x-4">
-              <span className="text-primary">TERMINAL</span>
-              <span className="text-muted-foreground">
-                View execution logs and output
-              </span>
-            </div>
-          </Button>
-
-          {isStatusExpanded && (
-            <div className="mt-2 bg-black/90 rounded border border-border/20 text-xs font-mono overflow-hidden">
-              {/* Terminal Content */}
-              <div className="p-3 max-h-48 overflow-y-auto space-y-1">
-                {/* Placeholder for future log implementation */}
-                <div className="flex items-start space-x-2">
-                  <span className="text-muted-foreground/70 text-xs shrink-0">
-                    [00:00:00]
-                  </span>
-                  <span className="text-blue-400 text-xs">
-                    Terminal ready for execution logs
-                  </span>
-                </div>
-
-                {/* Terminal Cursor */}
-                <div className="flex items-center space-x-2 mt-2">
-                  <span className="text-green-400">$</span>
-                  <div className="w-2 h-4 bg-green-400 animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
         {!selectedScript ? (
           <div className="flex-1 flex flex-col min-h-0">
             <Card className="flex-1 flex flex-col">
@@ -158,6 +116,18 @@ export function TestScriptViewer() {
                         .replace("_", " ")
                         .toUpperCase()}
                     </Badge>
+                    {isStreaming && (
+                      <Badge
+                        variant="outline"
+                        className="font-mono text-xs whitespace-nowrap"
+                      >
+                        GENERATING
+                        <span className="relative ml-auto flex h-1.5 w-1.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-green-400"></span>
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                        </span>
+                      </Badge>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center justify-between @lg:justify-end gap-2">
@@ -188,7 +158,6 @@ export function TestScriptViewer() {
                   </div>
 
                   <div className="flex items-center gap-1">
-                    {/* Edit/Lock Toggle */}
                     <Button
                       size="sm"
                       variant="ghost"
@@ -200,6 +169,7 @@ export function TestScriptViewer() {
                           : "text-muted-foreground hover:bg-muted"
                       )}
                       title={isEditMode ? "Lock Editor" : "Edit Code"}
+                      disabled={isStreaming}
                     >
                       {isEditMode ? (
                         <Lock className="h-4 w-4" />
@@ -208,7 +178,6 @@ export function TestScriptViewer() {
                       )}
                     </Button>
 
-                    {/* Edit Mode Actions */}
                     {isEditMode && (
                       <>
                         <Button
@@ -247,7 +216,6 @@ export function TestScriptViewer() {
                       </>
                     )}
 
-                    {/* Delete button - always available */}
                     <AlertWithTrigger
                       trigger={
                         <Button
@@ -284,8 +252,12 @@ export function TestScriptViewer() {
                       This test doesn't have any generated code yet.
                     </p>
                     <div className="pt-4">
-                      <Button variant="outline" className="font-mono text-sm">
-                        <Sparkles className="h-4 w-4 mr-2" />
+                      <Button
+                        variant="outline"
+                        className="font-mono text-sm"
+                        onClick={handleGenerateCode}
+                      >
+                        <Sparkles className={cn("h-4 w-4 mr-2")} />
                         Generate {currentLanguage} Code
                       </Button>
                     </div>

@@ -3,11 +3,9 @@
 import { atom } from "jotai";
 import { ScriptItem, mockScripts } from "@/lib/data";
 
-// Base atoms
 export const scriptsAtom = atom<ScriptItem[]>(mockScripts);
 export const selectedScriptAtom = atom<ScriptItem | null>(null);
 
-// Derived atoms for filtering and computed values
 export const acceptedScriptsAtom = atom((get) => {
   const scripts = get(scriptsAtom);
   return scripts.filter((script) => script.isAccepted);
@@ -23,7 +21,6 @@ export const simulationTestsAtom = atom((get) => {
   return scripts.filter((script) => script.script_type === "simulation_test");
 });
 
-// Filtered atoms that take a parameter
 export const filteredUnitTestsAtom = atom(
   (get) => (filterAccepted: boolean) => {
     const unitTests = get(unitTestsAtom);
@@ -42,7 +39,6 @@ export const filteredSimulationTestsAtom = atom(
   }
 );
 
-// Action atoms for mutations
 export const updateScriptAtom = atom(
   null,
   (
@@ -56,7 +52,6 @@ export const updateScriptAtom = atom(
     );
     set(scriptsAtom, updatedScripts);
 
-    // Update selected script if it's the one being updated
     const selectedScript = get(selectedScriptAtom);
     if (selectedScript?.scriptId === scriptId) {
       set(selectedScriptAtom, { ...selectedScript, ...updates });
@@ -71,7 +66,6 @@ export const deleteScriptAtom = atom(null, (get, set, scriptId: string) => {
   );
   set(scriptsAtom, updatedScripts);
 
-  // Clear selected script if it's the one being deleted
   const selectedScript = get(selectedScriptAtom);
   if (selectedScript?.scriptId === scriptId) {
     set(selectedScriptAtom, null);

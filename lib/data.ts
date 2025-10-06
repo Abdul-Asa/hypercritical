@@ -1,4 +1,3 @@
-// data.ts
 export interface ScriptItem {
   projectID: string;
   isDeleted: boolean;
@@ -17,7 +16,7 @@ export interface ScriptItem {
   isAccepted: boolean;
 }
 
-// Mock data (hardcoded, for frontend-only demo)
+// Hardcoded data 
 export const mockScripts: ScriptItem[] = [
   {
     projectID: "ad05c7a0-9cd1-417c-9ab0-e464ebf5c007",
@@ -26,9 +25,9 @@ export const mockScripts: ScriptItem[] = [
     testDescription: "PID Controller Response Test",
     script_language: "Python",
     script_type: "unit_test",
-    codePython: "Example Python code",
+    codePython: "",
     codeMatlab: "",
-    isGeneratedPython: true,
+    isGeneratedPython: false,
     isGeneratedMatlab: false,
     lastModified: null,
     noOfModification: 0,
