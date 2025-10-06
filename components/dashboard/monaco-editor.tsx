@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
+import { useMobile } from "@/hooks/use-mobile-size";
 
 interface MonacoEditorProps {
   value: string;
@@ -25,6 +26,7 @@ export function MonacoEditor({
   height = "100%",
 }: MonacoEditorProps) {
   const { theme } = useTheme();
+  const isMobile = useMobile();
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -151,8 +153,13 @@ export function MonacoEditor({
     }
   }, [theme]);
 
+  const editorHeight = isMobile ? "600px" : height;
+
   return (
-    <div className={cn("relative", className)}>
+    <div
+      className={cn("relative w-full h-full", className)}
+      style={{ minHeight: isMobile ? "400px" : undefined }}
+    >
       {isLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-card">
           <div className="text-muted-foreground font-mono text-sm">
@@ -161,7 +168,7 @@ export function MonacoEditor({
         </div>
       )}
       <Editor
-        height={height}
+        height={editorHeight}
         language={getMonacoLanguage(language)}
         value={value}
         onChange={handleEditorChange}

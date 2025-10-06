@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Space_Grotesk, Inter, Roboto } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk, Roboto } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/layout/providers";
 

@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAtomValue } from "jotai";
 import {
-  selectedScriptAtom,
   filteredUnitTestsAtom,
   filteredSimulationTestsAtom,
 } from "@/lib/atoms";
