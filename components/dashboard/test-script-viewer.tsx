@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import { MonacoEditor } from "@/components/dashboard/monaco-editor";
 import { AlertWithTrigger } from "@/components/dashboard/alert-with-trigger";
 import { cn } from "@/lib/utils";
-import { useData } from "@/hooks/use-data";
+import { ScriptItem } from "@/lib/data";
+import { useAtomValue, useSetAtom } from "jotai";
+import {
+  selectedScriptAtom,
+  updateScriptAtom,
+  deleteScriptAtom,
+} from "@/lib/atoms";
 import { useEditor } from "@/hooks/use-editor";
 import { useStream } from "@/hooks/use-stream";
 import {
@@ -19,7 +25,17 @@ import {
 import { Save, Undo, Redo, Trash2, Edit3, Lock, Sparkles } from "lucide-react";
 
 export function TestScriptViewer() {
-  const { selectedScript, updateScript, deleteScript } = useData();
+  const selectedScript = useAtomValue(selectedScriptAtom);
+  const updateScript = useSetAtom(updateScriptAtom);
+  const deleteScript = useSetAtom(deleteScriptAtom);
+
+  const updateScriptWrapper = (
+    scriptId: string,
+    updates: Partial<ScriptItem>
+  ) => {
+    updateScript({ scriptId, updates });
+  };
+
   const {
     currentLanguage,
     currentCode,
@@ -34,7 +50,7 @@ export function TestScriptViewer() {
     handleSave,
     handleUndo,
     handleRedo,
-  } = useEditor(selectedScript, updateScript);
+  } = useEditor(selectedScript, updateScriptWrapper);
   const { generateSingle, isStreaming } = useStream();
 
   const getTypeColor = (type: string) => {
@@ -61,7 +77,7 @@ export function TestScriptViewer() {
       selectedScript,
       currentLanguage,
       handleCodeChange,
-      updateScript
+      updateScriptWrapper
     );
   };
 
@@ -87,11 +103,11 @@ export function TestScriptViewer() {
         ) : (
           <>
             <div className="@container">
-              <div className="flex flex-col @lg:flex-row @lg:items-center @lg:justify-between gap-3 @lg:gap-0">
+              <div className="flex flex-col @xl:flex-row @xl:items-center @xl:justify-between gap-3 @xl:gap-0">
                 <div className="flex flex-col @md:flex-row @md:items-center gap-2 @md:gap-3">
-                  <div className="text-sm font-medium text-foreground max-w-[200px] @md:max-w-[300px] truncate">
+                  {/* <div className="text-sm font-medium text-foreground max-w-[200px] @md:max-w-[300px] truncate">
                     {selectedScript.testDescription}
-                  </div>
+                  </div> */}
                   <div className="flex items-center gap-2">
                     <Select
                       value={currentLanguage}
@@ -250,7 +266,15 @@ export function TestScriptViewer() {
                     </h3>
                     <p className="text-sm font-mono text-muted-foreground/70 max-w-md">
                       This test doesn't have any generated code yet.
-                    </p>
+                    </p>{" "}
+                    {!selectedScript.isAccepted && (
+                      <Badge
+                        variant="outline"
+                        className="font-mono text-xs text-red-400 border-red-400/30 whitespace-nowrap"
+                      >
+                        NOT ACCEPTED
+                      </Badge>
+                    )}
                     <div className="pt-4">
                       <Button
                         variant="outline"

@@ -9,7 +9,7 @@ export function getShortId(id: string): string {
   return id.split("-")[0];
 }
 
-function cleanCodeBlock(code: string): string {
+export function cleanCodeBlock(code: string): string {
   return code
     .replace(/^```[\w]*\n?/gm, "")
     .replace(/\n?```$/gm, "")

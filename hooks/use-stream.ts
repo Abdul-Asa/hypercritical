@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { ScriptItem } from "@/lib/data";
 import { streamCodeGeneration, StreamOptions } from "@/lib/streaming";
+import { cleanCodeBlock } from "@/lib/utils";
 
 export interface UseStreamReturn {
   isStreaming: boolean;
